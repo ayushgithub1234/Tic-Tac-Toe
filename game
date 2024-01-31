@@ -1,0 +1,176 @@
+<head>
+	<style>
+		*{
+    margin: 0;
+    padding:0;
+}
+
+body{
+    background-color: #548687;
+    text-align: center;
+    padding-top: 2vmax;
+    position: relative;
+}
+
+.container{
+    height:70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+main h1{
+    font-size: 50px;
+    font-family:'Gill Sans';
+}
+
+.game{
+    height: 60vmin;
+    width: 60vmin;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap:1.5vmin;
+}
+
+.box{
+    height: 18vmin;
+    width: 18vmin;
+    border-radius: 1em;
+    border:none;
+    box-shadow:  0 0 1rem rgba(0,0,0,0.5);
+    font-size: 7vmin;
+    color: #b0413e;
+
+}
+
+#reset{
+    padding: 1rem;
+    font-size: 1.25rem;
+    background-color: #191913;
+    color: #dcdcdc;
+    border: none;
+    border-radius: 1rem;
+}
+
+.Result{
+	display:flex;
+	border:1px solid black;
+	height:50px;
+	width:22%;
+	margin-left:5px;
+}
+.Result > div{
+	margin-left:20px;
+}
+	</style>
+</head>
+<body>
+    <main>
+        <h1>Tic-Tac-Toe</h1>
+		<div class="Result">
+				<div class="player1">
+					<h2>Player 1 (<b style="color:Blue;">X</b>)</h2>
+					<p id="scorex">0</p>
+				</div>
+				<div class="player2">
+					<h2>Player 2 (<b style="color:#f2120a;">O</b>)</h2>
+					<p id="scoreo">0</p>
+				</div>
+		</div>
+        <div class="container">
+            <div class="game">
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+            </div>
+        </div>
+        <button id="reset" onClick="resetGame()" style="cursor:pointer;">Reset Game</button>
+		<button id="reset" onClick="resetScore()" style="cursor:pointer;">Reset Scores</button>
+    </main>
+    <script>
+		let boxes = document.querySelectorAll(".box");
+		let turnO = true;
+		const winPattern = [
+			[0,1,2],
+			[3,4,5],
+			[6,7,8],
+			[0,3,6],
+			[2,5,8],
+			[1,4,7],
+			[2,4,6],
+			[0,4,8],
+		];
+		let count = 0;
+		let currentPlayerSymbol = 'X';
+		let board = [];
+		let scoreo = document.getElementById('scoreo');
+		let scorex = document.getElementById('scorex');
+		let x = 0;
+		let O = 0;
+		for(let i = 0; i < boxes.length; i++){
+			let box = boxes[i];
+			box.addEventListener("click", function(){
+					count ++;
+					if (turnO) {
+						box.innerText = "X";
+						box.style.color = "blue";
+						turnO = false;
+						currentPlayerSymbol = 'X';
+					} else {
+						box.innerText = "O";
+						box.style.color = "#f2120a";
+						turnO = true;
+						currentPlayerSymbol = 'O';
+					}
+					
+					box.disabled = true;
+					box.style.backgroundColor = "#dbdbdb";
+					board[i] = currentPlayerSymbol;
+					
+					winPattern.forEach(win => {
+						if(board[win[0]] === currentPlayerSymbol && board[win[1]] === currentPlayerSymbol && board[win[2]] === currentPlayerSymbol){
+							alert('Player ' + currentPlayerSymbol + ' wins!');
+							if(currentPlayerSymbol === 'X'){
+								x ++;
+								scorex.innerHTML = x;
+							}
+							else{
+								O ++;
+								scoreo.innerHTML = O;
+							}
+							resetGame();
+						}
+					});
+					if(count === 9){
+						alert('Its a Draw!');
+						resetGame();
+					}
+			});
+		}
+		
+		function resetGame(){
+			boxes.forEach(box => {
+				box.innerText = '';
+				box.style.backgroundColor = 'white';
+				box.disabled = false;
+			});
+			count = 0;
+			currentPlayerSymbol = 'X';
+			board = [];
+		}
+		function resetScore(){
+			x = 0;
+			O = 0;
+			scorex.innerHTML = x;
+			scoreo.innerHTML = O;
+		}
+	</script>
+</body>
